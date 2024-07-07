@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_project_team_7/bloc/cart_bloc/cart_bloc.dart';
 import 'package:mini_project_team_7/bloc/profile_bloc/profile_bloc.dart';
+import 'package:mini_project_team_7/services/repository/cart_repository.dart';
 import 'package:mini_project_team_7/services/repository/profile_repository.dart';
 
 void main() {
@@ -18,6 +20,9 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => ProfileBloc(ProfileRepository()),
+          ),
+          BlocProvider(
+            create: (context) => CartBloc(CartRepository()),
           ),
         ],
         child: Container(),
