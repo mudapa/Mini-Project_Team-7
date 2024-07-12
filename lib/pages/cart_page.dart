@@ -6,6 +6,7 @@ import '../bloc/cart_bloc/cart_bloc.dart';
 import '../bloc/product_cart_cubit/product_cart_cubit.dart';
 import '../model/cart_model.dart';
 import '../model/product_cart_model.dart';
+import '../shared/lottie.dart';
 import '../shared/style.dart';
 
 class CartPage extends StatelessWidget {
@@ -16,11 +17,16 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        backgroundColor: whiteColor,
         title: Text(
           'Shopping Cart',
           style: title.copyWith(
             fontWeight: FontWeight.w700,
           ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left_outlined),
+          onPressed: () {},
         ),
       ),
       body: SafeArea(
@@ -28,23 +34,87 @@ class CartPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
           ),
-          child: BlocBuilder<CartBloc, CartState>(
-            builder: (context, state) {
-              if (state is CartLoadingState) {
-                return const Center(child: CircularProgressIndicator());
-              }
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                Text(
+                  'Cart',
+                  style: title.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 16,
+                  ),
+                  padding: const EdgeInsets.all(16),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: whiteColor,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: greyColor,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      lottieCartEmpty,
+                      Text(
+                        'Your cart is empty',
+                        style: body.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: placeholderColor,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          'Start Shopping',
+                          style: body.copyWith(
+                            color: whiteColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  'History Cart',
+                  style: title.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) {
+                    if (state is CartLoadingState) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-              if (state is CartLoadedState) {
-                var data = state.cart;
-                return HistoryCart(data: data);
-              }
+                    if (state is CartLoadedState) {
+                      var data = state.cart;
+                      return HistoryCart(data: data);
+                    }
 
-              if (state is CartErrorState) {
-                return const Center(child: Text('Failed to fetch cart'));
-              }
+                    if (state is CartErrorState) {
+                      return const Center(child: Text('Failed to fetch cart'));
+                    }
 
-              return const SizedBox();
-            },
+                    return const SizedBox();
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -62,100 +132,96 @@ class HistoryCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8,
-      ),
-      itemCount: data.length,
-      itemBuilder: (context, index) {
-        final cart = data[index];
-        return Container(
-          padding: const EdgeInsets.all(8),
-          margin: const EdgeInsets.symmetric(
-            vertical: 8,
-          ),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: greyColor,
+    return SizedBox(
+      height: 500,
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(
+          vertical: 8,
+        ),
+        itemCount: data.length,
+        itemBuilder: (context, index) {
+          final cart = data[index];
+          return Container(
+            padding: const EdgeInsets.all(8),
+            margin: const EdgeInsets.symmetric(
+              vertical: 8,
             ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                // children: e.products.map((e) {
-                //   return Column(
-                //     children: [
-                //       CustomTileCart(product: e),
-                //       const Divider(),
-                //     ],
-                //   );
-                // }).toList(),
-                children: [
-                  Column(
-                    children: cart.products.map((e) {
-                      return Column(
-                        children: [
-                          CustomTileCart(product: e),
-                          const Divider(),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                  Text(
-                    'Total Product: ${cart.products.length}',
-                    style: body.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: greyColor,
               ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    DateFormat('dd-MM-yyyy').format(cart.date),
-                    style: body.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: placeholderColor,
+              borderRadius: BorderRadius.circular(8),
+              color: whiteColor,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    Column(
+                      children: cart.products.map((e) {
+                        return Column(
+                          children: [
+                            CustomTileCart(product: e),
+                            const Divider(),
+                          ],
+                        );
+                      }).toList(),
                     ),
-                    textAlign: TextAlign.end,
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      height: 32,
-                      width: 120,
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(8),
+                    Text(
+                      'Total Product: ${cart.products.length}',
+                      style: body.copyWith(
+                        fontWeight: FontWeight.w600,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            'Check Out',
-                            style: body.copyWith(
-                              color: whiteColor,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      DateFormat('dd-MM-yyyy').format(cart.date),
+                      style: body.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: placeholderColor,
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: Container(
+                        height: 32,
+                        width: 120,
+                        decoration: BoxDecoration(
+                          color: primaryColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              'Buy Again',
+                              style: body.copyWith(
+                                color: whiteColor,
+                              ),
                             ),
-                          ),
-                          Icon(
-                            Icons.shopping_cart_outlined,
-                            color: whiteColor,
-                            size: 18,
-                          )
-                        ],
+                            Icon(
+                              Icons.refresh_outlined,
+                              color: whiteColor,
+                              size: 18,
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
