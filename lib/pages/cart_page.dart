@@ -24,10 +24,6 @@ class CartPage extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left_outlined),
-          onPressed: () {},
-        ),
       ),
       body: SafeArea(
         child: Padding(
