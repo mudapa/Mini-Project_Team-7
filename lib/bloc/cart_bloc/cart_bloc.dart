@@ -8,13 +8,11 @@ part 'cart_event.dart';
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  final CartRepository cartRepository;
-
-  CartBloc(this.cartRepository) : super(CartInitial()) {
+  CartBloc() : super(CartInitial()) {
     on<LoadCartEvent>((event, emit) async {
       emit(CartLoadingState());
       try {
-        final cart = await cartRepository.fetchCart();
+        final cart = await CartRepository().fetchCart();
         emit(CartLoadedState(cart: cart));
       } catch (e) {
         emit(CartErrorState());
