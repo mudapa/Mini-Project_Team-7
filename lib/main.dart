@@ -17,24 +17,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => ProfileBloc(ProfileRepository()),
-          ),
-          BlocProvider(
-            create: (context) => CartBloc()..add(LoadCartEvent()),
-          ),
-          BlocProvider(
-            create: (context) => ProductCartCubit(),
-          ),
-          BlocProvider(
-            create: (context) => ProductBloc(ProductRepository()),
-          ),
-        ],
-        child: const ProductPage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProfileBloc(ProfileRepository()),
+        ),
+        BlocProvider(
+          create: (context) => CartBloc()..add(LoadCartEvent()),
+        ),
+        BlocProvider(
+          create: (context) => ProductCartCubit(),
+        ),
+        BlocProvider(
+          create: (context) => ProductBloc(ProductRepository()),
+        ),
+      ],
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: ProductPage(),
       ),
     );
   }
