@@ -5,6 +5,8 @@ import 'package:mini_project_team_7/bloc/product_bloc/product_bloc.dart';
 import 'package:mini_project_team_7/model/product_model.dart';
 import 'package:mini_project_team_7/shared/style.dart';
 
+import 'widgets/custom_drawer.dart';
+
 class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
 
@@ -42,7 +44,7 @@ class ProductPage extends StatelessWidget {
             ),
           ),
         ),
-        drawer: Drawer(),
+        drawer: CustomDrawer(),
         body: BlocBuilder<ProductBloc, ProductState>(
           builder: (context, state) {
             if (state is ProductLoadingState) {
